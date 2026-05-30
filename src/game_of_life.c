@@ -108,7 +108,6 @@ void paint_field(int** grid, int speed) {
 
 int user_input(int* speed) {
     int key = getch();
-    mvprintw(ROWS + 2, 0, "%c, %d", key, key);
     if (key == ' ') return 0;
     if (key == 'a' || key == 'A') {
         *speed -= SPEED_STEP;
