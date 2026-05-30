@@ -19,6 +19,7 @@ int** game_tick(int** grid);
 int get_amount_of_live_neighbours(int** grid, int x, int y);
 int true_x_coord(int x);
 int true_y_coord(int y);
+void init_screen();
 
 int main() {
     int speed = SPEED_START;
@@ -28,7 +29,6 @@ int main() {
         fprintf(stderr, "Memory allocation failed\n");
         return 1;
     }
-
     read_field(grid);
 
     if (freopen("/dev/tty", "r", stdin) == NULL) {
@@ -37,13 +37,8 @@ int main() {
         return 1;
     }
 
-    initscr();
-    noecho();
-    cbreak();
-    nodelay(stdscr, TRUE);
-    keypad(stdscr, TRUE);
+    init_screen();
 
-    curs_set(0);
     speed = SPEED_START;
 
     paint_field(grid, speed);
@@ -63,6 +58,16 @@ int main() {
     endwin();
 
     return 0;
+}
+
+void init_screen() {
+    initscr();
+    noecho();
+    cbreak();
+    nodelay(stdscr, TRUE);
+    keypad(stdscr, TRUE);
+
+    curs_set(0);
 }
 
 void read_field(int** grid) {
