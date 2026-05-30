@@ -24,6 +24,11 @@ int main() {
     int speed = SPEED_START;
 
     int** grid = make_grid();
+    if (grid == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return 1;
+    }
+
     read_field(grid);
 
     if (freopen("/dev/tty", "r", stdin) == NULL) {
@@ -32,31 +37,30 @@ int main() {
         return 1;
     }
 
-    initscr();              // иначе ncurses не запустится
-    noecho();               // нажатые клавиши отпечатаются на поле
-    cbreak();               // иначе клавиши работать не будут
-    nodelay(stdscr, TRUE);  // игра зависает и ждет нажатие
+    initscr();
+    noecho();
+    cbreak();
+    nodelay(stdscr, TRUE);
     keypad(stdscr, TRUE);
 
-    curs_set(0);  // курсор мигает поверх поляs
+    curs_set(0);
     speed = SPEED_START;
 
     paint_field(grid, speed);
 
-    // mvprintw(ROWS + 1, 0, "before tick");
     int running = 1;
     while (running) {
         int** new_grid = game_tick(grid);
 
         free_grid_mem(grid);
         grid = new_grid;
-        running = user_input(&speed);  // нажатие клавиш
+        running = user_input(&speed);
         paint_field(grid, speed);
         napms(speed);
     }
 
     free_grid_mem(grid);
-    endwin();  // закрытие ncurses
+    endwin();
 
     return 0;
 }
